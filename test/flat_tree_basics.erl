@@ -129,7 +129,33 @@ rightchild_test() ->
     ok.
 
 leftspan_test() ->
+    0 = flat_tree:left_span(0),
+    0 = flat_tree:left_span(3),
+    0 = flat_tree:left_span(7),
+    8 = flat_tree:left_span(11),
+    8 = flat_tree:left_span(9),
+    12 = flat_tree:left_span(13),
     ok.
 
 rightspan_test() ->
+    2 = flat_tree:right_span(1),
+    6 = flat_tree:right_span(3),
+    14 = flat_tree:right_span(7),
+    10 = flat_tree:right_span(9),
+    ok.
+
+spans_test() ->
+    {0, 14} = flat_tree:spans(7),
+    {0, 6} = flat_tree:spans(3),
+    {8, 10} = flat_tree:spans(9),
+    {8, 14} = flat_tree:spans(11),
+    ok.
+
+count_test() ->
+    1 = flat_tree:count(0),
+    15 = flat_tree:count(7),
+    3 = flat_tree:count(5),
+    7 = flat_tree:count(3),
+    7 = flat_tree:count(11),
+    1 = flat_tree:count(14),
     ok.

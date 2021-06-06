@@ -212,25 +212,17 @@ r_span(Index, Depth) -> (offset(Index) + 1) * (2 bsl Depth) - 2.
 spans(Index) ->
     {left_span(Index), right_span(Index)}.
 
-%% Return how many nodes are in the subtee at the given index.
+%% Return how many nodes are in the subtee at the given index including
+%% the node of the index in the count.
 count(Index) ->
     Depth = depth(Index),
     (2 bsl Depth) - 1.
 
-full_roots() ->
-    %% TODO
-    ok.
+%% TODO...maybe
+%full_roots() -> ok.
 
 %%%
 %%%  Private
 %%%
-
-%% Helper
-%showbits(Values) ->
-%    lists:foreach(fun(E) -> io:format("~.2B~n", [E]) end, Values),
-%   Depths = [depth(I) || I <- [0, 1, 2, 3, 4, 5, 6, 7]],
-%    io:format("Depths~n"),
-%   lists:foreach(fun(E) -> io:format("~p~n", [E]) end, Depths).
-
 is_even(Index) when is_integer(Index) ->
     (Index band 1) =:= 0.
