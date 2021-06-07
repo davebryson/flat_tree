@@ -159,3 +159,13 @@ count_test() ->
     7 = flat_tree:count(11),
     1 = flat_tree:count(14),
     ok.
+
+full_roots_test() ->
+    [] = flat_tree:full_roots(0),
+    [0] = flat_tree:full_roots(2),
+    [3] = flat_tree:full_roots(8),
+    [7] = flat_tree:full_roots(16),
+    [1, 4] = flat_tree:full_roots(6),
+    [7, 17] = flat_tree:full_roots(20),
+    [7, 16] = flat_tree:full_roots(18),
+    ok.

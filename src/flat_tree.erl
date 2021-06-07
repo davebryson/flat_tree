@@ -13,7 +13,7 @@
 %%%                             /     \
 %%%                           /         \
 %%%                         /             \
-%%%         2              3                11
+%%%         2              3               11
 %%%                       / \              / \
 %%%                      /   \            /   \
 %%%                     /     \          /     \
@@ -54,7 +54,8 @@
     left_span/1,
     right_span/1,
     spans/1,
-    count/1
+    count/1,
+    full_roots/1
 ]).
 
 %% @doc Find the index value at a given depth and offset from the left of the tree.
@@ -218,8 +219,48 @@ count(Index) ->
     Depth = depth(Index),
     (2 bsl Depth) - 1.
 
-%% TODO...maybe
-%full_roots() -> ok.
+%% @doc Return a list of indices that represent the full nodes and subtrees
+%% to the left of the given index.  For example, given this (partial) tree:
+%%
+%%           3
+%%         /   \
+%%        /     \
+%%       1       5
+%%      / \     / \
+%%     0   2   4   6
+%%
+%% You get:
+%% [1,4] = flat_tree:full_roots(6)
+%% As index 1 is full to the left, and 4 is the node to the left
+%%
+%% [1] = flat_tree:full_roots(4)
+%% 1 is the only full node to the left of 4
+%%
+%% and...
+%% [] = flat_tree:full_roots(0).
+%% as there are no nodes to the left of 0
+%%
+%% The input Index must be a leaf index (even number), otherwise you get an error.
+full_roots(Index) when Index band 1 =:= 1 ->
+    {error, only_even_indices_allowed};
+full_roots(Index) ->
+    find_roots(Index bsr 1, 0, 1, []).
+
+calculate_factor(Factor, Index) when Factor * 2 =< Index ->
+    calculate_factor(Factor * 2, Index);
+calculate_factor(Factor, _) ->
+    Factor.
+
+find_roots(0, _, _, Nodes) ->
+    lists:reverse(Nodes);
+find_roots(Index, Offset, Factor, Nodes) ->
+    NextFactor = calculate_factor(Factor, Index),
+    find_roots(
+        Index - NextFactor,
+        Offset + 2 * NextFactor,
+        1,
+        [Offset + NextFactor - 1 | Nodes]
+    ).
 
 %%%
 %%%  Private
