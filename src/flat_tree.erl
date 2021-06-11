@@ -7,7 +7,7 @@
 %%%
 %%% As an example (from the RFC), here's a tree with a width of 8 leafs
 %%% and a depth of 3:
-%%%
+%%%```
 %%%         3                      7
 %%%                               / \
 %%%                             /     \
@@ -30,6 +30,8 @@
 %%%   - 1 represents C0 and C1
 %%%   - 3 represent C0..C3
 %%%   ... etc ...
+%%% '''
+%%%
 %%%  Even numbers are always leafs at depth 0
 %%%  Odd numbers are parents at depths > 0
 %%%
@@ -68,18 +70,21 @@ index(Depth, Offset) ->
 %%
 %% To find the depth count the number of trailing '1' bits (LSBs)
 %% for the given Index.  For example, the value:
-%%
+%%```
 %%             11000001,
 %%                    ^- has a depth of 1.
 %%             11000011
 %%                    ^- has a depth of 2.
+%%'''
 %%
 %% Interestingly, even numbers have no trailing '1s' and
 %% therefore are always at depth 0.
 %%
 %% Side note: Funky business converting an integer to binary...
 %% the built in function (integer_to_binary) returns something different.
+%% ```
 %% <<Index>> != integer_to_binary(Index)
+%%'''
 %%
 %% This is not the most optimal solution.  A better approach would be
 %% with a lookup table.
@@ -104,7 +109,7 @@ count_ones([H | T], Count) ->
 %%
 %% For example: (0, 1, 3, 7) have an offset of 0
 %% (Tree is rotated to right in diagram)
-%%
+%%```
 %% (0)┐
 %%   (1)┐
 %%  2─┘ │
@@ -130,7 +135,7 @@ count_ones([H | T], Count) ->
 %% 12──┐  │
 %%    13──┘
 %% 14──┘
-%%
+%%'''
 offset(Index) ->
     Depth = depth(Index),
     case is_even(Index) of
@@ -221,7 +226,7 @@ count(Index) ->
 
 %% @doc Return a list of indices that represent the full nodes and subtrees
 %% to the left of the given index.  For example, given this (partial) tree:
-%%
+%%```
 %%           3
 %%         /   \
 %%        /     \
@@ -239,7 +244,7 @@ count(Index) ->
 %% and...
 %% [] = flat_tree:full_roots(0).
 %% as there are no nodes to the left of 0
-%%
+%%'''
 %% The input Index must be a leaf index (even number), otherwise you get an error.
 full_roots(Index) when Index band 1 =:= 1 ->
     {error, only_even_indices_allowed};
