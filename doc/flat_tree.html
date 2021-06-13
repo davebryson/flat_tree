@@ -61,15 +61,11 @@ https://github.com/datrs/flat-tree</p>
 <tr><td valign="top"><a href="#full_roots-1">full_roots/1</a></td><td>Return a list of indices that represent the full nodes and subtrees
   to the left of the given index.</td></tr>
 <tr><td valign="top"><a href="#index-2">index/2</a></td><td>Find the index value at a given depth and offset from the left of the tree.</td></tr>
-<tr><td valign="top"><a href="#left_child-1">left_child/1</a></td><td>Get the child to the left
-  returns:
-  none | index.</td></tr>
+<tr><td valign="top"><a href="#left_child-1">left_child/1</a></td><td>Get the child to the left.</td></tr>
 <tr><td valign="top"><a href="#left_span-1">left_span/1</a></td><td>The index of the left most node in the span.</td></tr>
 <tr><td valign="top"><a href="#offset-1">offset/1</a></td><td>Return the offset for an index from the left side of the tree.</td></tr>
 <tr><td valign="top"><a href="#parent-1">parent/1</a></td><td>Return the index of the parent for the given index.</td></tr>
-<tr><td valign="top"><a href="#right_child-1">right_child/1</a></td><td>Get the child to the right
-  returns:
-  none | index.</td></tr>
+<tr><td valign="top"><a href="#right_child-1">right_child/1</a></td><td>Get the child to the right.</td></tr>
 <tr><td valign="top"><a href="#right_span-1">right_span/1</a></td><td>The index of the right most node in the span.</td></tr>
 <tr><td valign="top"><a href="#sibling-1">sibling/1</a></td><td>Return the index of node that shares a parent.</td></tr>
 <tr><td valign="top"><a href="#spans-1">spans/1</a></td><td>return the span of the left and right nodes for the given index.</td></tr>
@@ -80,21 +76,19 @@ https://github.com/datrs/flat-tree</p>
 
 <h3 class="function"><a name="children-1">children/1</a></h3>
 <div class="spec">
-<p><tt>children(Index) -&gt; any()</tt></p>
+<p><tt>children(Index::pos_integer()) -&gt; none | {LeftIndex::pos_integer(), RightIndex::pos_integer}</tt><br></p>
 <p> </p>
-</div><p>Find the Indices of the children for a given index.
-  returns:
-  none | {left index, right index}</p>
+</div><p>Find the Indices of the children for a given index.</p>
 
 <h3 class="function"><a name="count-1">count/1</a></h3>
 <div class="spec">
-<p><tt>count(Index) -&gt; any()</tt></p>
+<p><tt>count(Index::pos_integer()) -&gt; Count::pos_integer()</tt><br></p>
 <p> </p>
 </div>
 
 <h3 class="function"><a name="depth-1">depth/1</a></h3>
 <div class="spec">
-<p><tt>depth(Index) -&gt; any()</tt></p>
+<p><tt>depth(Index::pos_integer()) -&gt; Depth::pos_integer()</tt><br></p>
 <p> </p>
 </div><p><p>Calculate the depth of the tree for a given index.  
 The root of the tree is the highest depth.  
@@ -122,7 +116,7 @@ therefore are always at depth 0.</p>
 
 <h3 class="function"><a name="full_roots-1">full_roots/1</a></h3>
 <div class="spec">
-<p><tt>full_roots(Index) -&gt; any()</tt></p>
+<p><tt>full_roots(Index::pos_integer()) -&gt; {error, only_even_indices_allowed} | [Index::pos_integer()]</tt><br></p>
 <p> </p>
 </div><p>Return a list of indices that represent the full nodes and subtrees
   to the left of the given index.  For example, given this (partial) tree:
@@ -147,27 +141,25 @@ therefore are always at depth 0.</p>
 
 <h3 class="function"><a name="index-2">index/2</a></h3>
 <div class="spec">
-<p><tt>index(Depth, Offset) -&gt; any()</tt></p>
+<p><tt>index(Depth::pos_integer(), Offset::pos_integer()) -&gt; Index::pos_integer()</tt><br></p>
 <p> </p>
 </div><p>Find the index value at a given depth and offset from the left of the tree.</p>
 
 <h3 class="function"><a name="left_child-1">left_child/1</a></h3>
 <div class="spec">
-<p><tt>left_child(Index) -&gt; any()</tt></p>
+<p><tt>left_child(Index::pos_integer()) -&gt; none | (Index::pos_integer())</tt><br></p>
 <p> </p>
-</div><p>Get the child to the left
-  returns:
-  none | index</p>
+</div><p>Get the child to the left</p>
 
 <h3 class="function"><a name="left_span-1">left_span/1</a></h3>
 <div class="spec">
-<p><tt>left_span(Index) -&gt; any()</tt></p>
+<p><tt>left_span(Index::pos_integer()) -&gt; Index::pos_integer()</tt><br></p>
 <p> </p>
 </div><p>The index of the left most node in the span</p>
 
 <h3 class="function"><a name="offset-1">offset/1</a></h3>
 <div class="spec">
-<p><tt>offset(Index) -&gt; any()</tt></p>
+<p><tt>offset(Index::pos_integer()) -&gt; Offset::pos_integer()</tt><br></p>
 <p> </p>
 </div><p><p>Return the offset for an index from the left side of the tree.</p>
  
@@ -201,39 +193,37 @@ therefore are always at depth 0.</p>
 
 <h3 class="function"><a name="parent-1">parent/1</a></h3>
 <div class="spec">
-<p><tt>parent(Index) -&gt; any()</tt></p>
+<p><tt>parent(Index::pos_integer()) -&gt; Parent::pos_integer()</tt><br></p>
 <p> </p>
 </div><p>Return the index of the parent for the given index.</p>
 
 <h3 class="function"><a name="right_child-1">right_child/1</a></h3>
 <div class="spec">
-<p><tt>right_child(Index) -&gt; any()</tt></p>
+<p><tt>right_child(Index::pos_integer()) -&gt; none | (Index::pos_integer())</tt><br></p>
 <p> </p>
-</div><p>Get the child to the right
-  returns:
-  none | index</p>
+</div><p>Get the child to the right</p>
 
 <h3 class="function"><a name="right_span-1">right_span/1</a></h3>
 <div class="spec">
-<p><tt>right_span(Index) -&gt; any()</tt></p>
+<p><tt>right_span(Index::pos_integer()) -&gt; Index::pos_integer()</tt><br></p>
 <p> </p>
 </div><p>The index of the right most node in the span</p>
 
 <h3 class="function"><a name="sibling-1">sibling/1</a></h3>
 <div class="spec">
-<p><tt>sibling(Index) -&gt; any()</tt></p>
+<p><tt>sibling(Index::pos_integer()) -&gt; Sibling::pos_integer()</tt><br></p>
 <p> </p>
 </div><p>Return the index of node that shares a parent</p>
 
 <h3 class="function"><a name="spans-1">spans/1</a></h3>
 <div class="spec">
-<p><tt>spans(Index) -&gt; any()</tt></p>
+<p><tt>spans(Index::pos_integer()) -&gt; {LeftIndex::pos_integer(), RightIndex::pos_integer()}</tt><br></p>
 <p> </p>
 </div><p>return the span of the left and right nodes for the given index.</p>
 
 <h3 class="function"><a name="uncle-1">uncle/1</a></h3>
 <div class="spec">
-<p><tt>uncle(Index) -&gt; any()</tt></p>
+<p><tt>uncle(Index::pos_integer()) -&gt; Uncle::pos_integer()</tt><br></p>
 <p> </p>
 </div><p>Return a parent's sibiling</p>
 <hr>

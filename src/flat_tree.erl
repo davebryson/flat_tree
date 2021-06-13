@@ -61,6 +61,7 @@
 ]).
 
 %% @doc Find the index value at a given depth and offset from the left of the tree.
+-spec index(Depth :: pos_integer(), Offset :: pos_integer()) -> Index :: pos_integer().
 index(Depth, Offset) ->
     Offset bsl (Depth + 1) bor ((1 bsl Depth) - 1).
 
@@ -91,6 +92,7 @@ index(Depth, Offset) ->
 %% Here we:
 %%  - reverse the binary and push the bits on to the head of a list (Acc)
 %%  - then, we count '1s' till we hit a '0'.
+-spec depth(Index :: pos_integer()) -> Depth :: pos_integer().
 depth(Index) ->
     dep(<<Index>>, <<>>).
 dep(<<>>, Acc) ->
@@ -136,6 +138,7 @@ count_ones([H | T], Count) ->
 %%    13──┘
 %% 14──┘
 %%'''
+-spec offset(Index :: pos_integer()) -> Offset :: pos_integer().
 offset(Index) ->
     Depth = depth(Index),
     case is_even(Index) of
@@ -144,23 +147,26 @@ offset(Index) ->
     end.
 
 %% @doc Return the index of the parent for the given index.
+-spec parent(Index :: pos_integer()) -> Parent :: pos_integer().
 parent(Index) ->
     Depth = depth(Index),
     index(Depth + 1, offset(Index) bsr 1).
 
 %% @doc Return the index of node that shares a parent
+-spec sibling(Index :: pos_integer()) -> Sibling :: pos_integer().
 sibling(Index) ->
     Depth = depth(Index),
     index(Depth, offset(Index) bxor 1).
 
 %% @doc Return a parent's sibiling
+-spec uncle(Index :: pos_integer()) -> Uncle :: pos_integer().
 uncle(Index) ->
     Depth = depth(Index),
     index(Depth + 1, offset(parent(Index)) bxor 1).
 
 %% @doc Find the Indices of the children for a given index.
-%% returns:
-%% none | {left index, right index}
+-spec children(Index :: pos_integer()) ->
+    none | {LeftIndex :: pos_integer(), RightIndex :: pos_integer}.
 children(Index) ->
     Depth = depth(Index),
     find_chillin(Index, Depth).
@@ -175,8 +181,7 @@ find_chillin(Index, Depth) ->
     {index(Depth - 1, Offset), index(Depth - 1, Offset + 1)}.
 
 %% @doc Get the child to the left
-%% returns:
-%% none | index
+-spec left_child(Index :: pos_integer()) -> none | Index :: pos_integer().
 left_child(Index) ->
     Depth = depth(Index),
     find_left_child(Index, Depth).
@@ -188,8 +193,7 @@ find_left_child(Index, Depth) ->
     index(Depth - 1, offset(Index) bsl 1).
 
 %% @doc Get the child to the right
-%% returns:
-%% none | index
+-spec right_child(Index :: pos_integer()) -> none | Index :: pos_integer().
 right_child(Index) ->
     Depth = depth(Index),
     find_right_child(Index, Depth).
@@ -201,6 +205,7 @@ find_right_child(Index, Depth) ->
     index(Depth - 1, (offset(Index) bsl 1) + 1).
 
 %% @doc The index of the left most node in the span
+-spec left_span(Index :: pos_integer()) -> Index :: pos_integer().
 left_span(Index) ->
     Depth = depth(Index),
     l_span(Index, Depth).
@@ -208,6 +213,7 @@ l_span(Index, Depth) when Depth =:= 0 -> Index;
 l_span(Index, Depth) -> offset(Index) * (2 bsl Depth).
 
 %% @doc The index of the right most node in the span
+-spec right_span(Index :: pos_integer()) -> Index :: pos_integer().
 right_span(Index) ->
     Depth = depth(Index),
     r_span(Index, Depth).
@@ -215,11 +221,14 @@ r_span(Index, Depth) when Depth =:= 0 -> Index;
 r_span(Index, Depth) -> (offset(Index) + 1) * (2 bsl Depth) - 2.
 
 %% @doc return the span of the left and right nodes for the given index.
+-spec spans(Index :: pos_integer()) ->
+    {LeftIndex :: pos_integer(), RightIndex :: pos_integer()}.
 spans(Index) ->
     {left_span(Index), right_span(Index)}.
 
 %% Return how many nodes are in the subtee at the given index including
 %% the node of the index in the count.
+-spec count(Index :: pos_integer()) -> Count :: pos_integer().
 count(Index) ->
     Depth = depth(Index),
     (2 bsl Depth) - 1.
@@ -246,6 +255,8 @@ count(Index) ->
 %% as there are no nodes to the left of 0
 %%'''
 %% The input Index must be a leaf index (even number), otherwise you get an error.
+-spec full_roots(Index :: pos_integer()) ->
+    {error, only_even_indices_allowed} | [Index :: pos_integer()].
 full_roots(Index) when Index band 1 =:= 1 ->
     {error, only_even_indices_allowed};
 full_roots(Index) ->
